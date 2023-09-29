@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+</head>
+<body>
+    <p id="test"></p>
+    <main>
+        <h2>messages:</h2>
+        <div id="messages"></div>
+        <button type="button" id="button" disabled>next round</button>
+    </main>
+    <script defer>
+        const IP = "192.168.88.67"
+        let counter = 0;
+        const players = 5;
+        const socket = io(`http://${IP}:3000`)
+        socket.on('recive-message', (id, m) => {
+            counter++;
+            document.getElementById('test').innerHTML += counter
+            if(counter => players)
+            {
+                socket.emit('end-of-round')
+                document.getElementById('button').disabled = false;
+                document.getElementById('messages').innerHTML += `<p>----------</p>`;
+
+            }
+            else{
+                document.getElementById('messages').innerHTML += `<p>${id}: ${m}</p>`;
+            }
+        });
+
+        document.getElementById('button').addEventListener('click',()=>{
+            socket.emit('new-round')
+        })
+
+    </script>
+</body>
+</html>
